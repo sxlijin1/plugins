@@ -187,10 +187,11 @@ export class TrunkDriver {
       return;
     }
 
-    if (process.platform !== "darwin") {
-      await this.launchDaemonAsync();
-      this.debug("Launched daemon");
-    }
+    // TODO: CHRIS: I COMMENTED OUT THIS BLOCK OF CODE
+    // if (process.platform !== "darwin") {
+    //   await this.launchDaemonAsync();
+    //   this.debug("Launched daemon");
+    // }
 
     // Enable tested linter if specified
     if (!this.linter) {
@@ -204,7 +205,9 @@ export class TrunkDriver {
       const linterVersionString = `${this.linter}${versionString}`;
       // Prefer calling `check enable` over editing trunk.yaml directly because it also handles version, etc.
       this.debug("Enabling %s", linterVersionString);
+      // TODO: CHRIS: APPENDING --debug MAKES THIS WORK AND NOT HANG
       await this.run(`check enable ${linterVersionString} --monitor=false`);
+      this.debug("Enabled!!!");
 
       // Retrieve the enabled version
       const newTrunkContents = fs.readFileSync(
@@ -229,10 +232,10 @@ export class TrunkDriver {
   tearDown() {
     this.debug("Cleaning up %s", this.sandboxPath);
     const trunkCommand = ARGS.cliPath ?? "trunk";
-    execFileSync(trunkCommand, ["deinit"], {
-      cwd: this.sandboxPath,
-      env: executionEnv(this.getSandbox()),
-    });
+    // execFileSync(trunkCommand, ["deinit"], {
+    //   cwd: this.sandboxPath,
+    //   env: executionEnv(this.getSandbox()),
+    // });
     if (this.sandboxPath) {
       fs.rmSync(this.sandboxPath, { recursive: true });
     }
@@ -380,6 +383,8 @@ export class TrunkDriver {
    */
   async run(args: string, execOptions?: ExecOptions) {
     const trunkPath = ARGS.cliPath ?? "trunk";
+    // TODO: CHRIS I'VE TRIED ADDING SHELL: TRUE HERE AND DIFFERENT PERMUTATIONS OF THE CHILD_PROCESS LIB, THE BEST I'VE GOTTEN IS
+    // WITH THE TEST DIES IMMEDIATELY AND ERRORS OUT.
     return await execFilePromise(trunkPath, args.split(" ").filter(Boolean), {
       cwd: this.sandboxPath,
       env: executionEnv(this.sandboxPath ?? ""),
