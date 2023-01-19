@@ -1,3 +1,4 @@
+  import { execSync } from "child_process";
 import * as fs from "fs";
 import path from "path";
 import { customLinterCheckTest, linterCheckTest, TestCallback } from "tests";
@@ -7,7 +8,7 @@ import { TEST_DATA } from "tests/utils";
 // Running check on the input manually requires the existence of a top level .detekt.yaml
 const preCheck = (driver: TrunkDriver) => {
   driver.writeFile(".detekt.yaml", "");
-};
+          };
 
 // TODO(Tyler): We will eventually need to add a couple more test cases involving failure modes.
 linterCheckTest({ linterName: "detekt", namedTestPrefixes: ["basic_detekt"], preCheck });
@@ -28,4 +29,14 @@ const gradlePreCheck: TestCallback = (driver) => {
   // trunk-ignore-end(semgrep)
 };
 
-customLinterCheckTest({ linterName: "detekt-gradle", args: "-a", preCheck: gradlePreCheck });
+const skipIfNoLfs = (_version?: string) => {
+  try {
+    // If git-lfs does not exist, exec will throw. To prevent extraneous failures, skip this test.
+    execSync("command -v git-lfs");
+    return false;
+  } catch (err) {
+    return true;
+  }
+}
+
+customLinterCheckTest({ linterName: "detekt-gradle", args: "-a", preCheck: gradlePreCheck, skipTestIf: skipIfNoLfs });
