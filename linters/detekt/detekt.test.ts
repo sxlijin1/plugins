@@ -6,9 +6,9 @@ import { TrunkDriver } from "tests/driver";
 import { TEST_DATA } from "tests/utils";
 
 // Running check on the input manually requires the existence of a top level .detekt.yaml
-const preCheck = (driver: TrunkDriver) => {
-  driver.writeFile(".detekt.yaml", "");
-};
+    const preCheck = (driver: TrunkDriver) => {
+      driver.writeFile(".detekt.yaml", "");
+    };
 
 // TODO(Tyler): We will eventually need to add a couple more test cases involving failure modes.
 linterCheckTest({ linterName: "detekt", namedTestPrefixes: ["basic_detekt"], preCheck });
@@ -21,12 +21,12 @@ linterCheckTest({ linterName: "detekt-explicit", namedTestPrefixes: ["basic_expl
 // without using a static jar.
 const gradlePreCheck: TestCallback = (driver) => {
   // Based on plugin.yaml, trunk invokes ${workspace}/gradlew and expects gradlew, etc. to exist at the workspace root.
-  // However, we expect .trunk/trunk.yaml to exist at the workspace root as well, so we move each file up to the workspace.
-  // trunk-ignore-begin(semgrep): paths used here are safe
-  fs.readdirSync(path.resolve(driver.getSandbox(), TEST_DATA, "detekt_gradle")).forEach((file) => {
-    driver.moveFile(path.join(TEST_DATA, "detekt_gradle", file), file);
-  });
-  // trunk-ignore-end(semgrep)
+      // However, we expect .trunk/trunk.yaml to exist at the workspace root as well, so we move each file up to the workspace.
+      // trunk-ignore-begin(semgrep): paths used here are safe
+      fs.readdirSync(path.resolve(driver.getSandbox(), TEST_DATA, "detekt_gradle")).forEach((file) => {
+        driver.moveFile(path.join(TEST_DATA, "detekt_gradle", file), file);
+      });
+      // trunk-ignore-end(semgrep)
 };
 
 const skipIfNoLfs = (_version?: string) => {
