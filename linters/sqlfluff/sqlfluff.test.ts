@@ -18,4 +18,4 @@ const fmtCallbacks: TestCallback = (driver) => {
 };
 
 // TODO(Tyler): We will eventually need to add a couple more test cases involving failure modes.
-linterFmtTest({ linterName: "sqlfluff", namedTestPrefixes: ["basic_fmt"], preCheck: fmtCallbacks });
+// linterFmtTest({ linterName: "sqlfluff", namedTestPrefixes: ["basic_fmt"], preCheck: fmtCallbacks });

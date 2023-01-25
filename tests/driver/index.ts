@@ -197,10 +197,10 @@ export class TrunkDriver {
       return;
     }
 
-    if (process.platform !== "darwin") {
-      await this.launchDaemonAsync();
-      this.debug("Launched daemon");
-    }
+    // if (process.platform !== "darwin") {
+    //   await this.launchDaemonAsync();
+    //   this.debug("Launched daemon");
+    // }
 
     // Enable tested linter if specified
     if (!this.linter) {
@@ -239,16 +239,16 @@ export class TrunkDriver {
   tearDown() {
     this.debug("Cleaning up %s", this.sandboxPath);
     const trunkCommand = ARGS.cliPath ?? "trunk";
-    if (this.daemon) {
-      execFileSync(trunkCommand, ["deinit"], {
-        cwd: this.sandboxPath,
-        env: executionEnv(this.getSandbox()),
-      });
-    }
+    // if (this.daemon) {
+    //   // execFileSync(trunkCommand, ["deinit"], {
+    //   //   cwd: this.sandboxPath,
+    //   //   env: executionEnv(this.getSandbox()),
+    //   // });
+    // }
 
-    if (this.sandboxPath) {
-      fs.rmSync(this.sandboxPath, { recursive: true });
-    }
+    // if (this.sandboxPath) {
+    //   fs.rmSync(this.sandboxPath, { recursive: true });
+    // }
   }
 
   /**** Repository file manipulation ****/
